@@ -2,7 +2,7 @@
 
 (function() {
 	const url = "http://api.openweathermap.org/data/2.5/weather?q=";
-	const apiKey = "APIKEY"; // Replace "APIKEY" with your own API key; otherwise, your HTTP request will not work
+	const apiKey = "cef9368623ad0361da925b4cc873a247"; // Replace "APIKEY" with your own API key; otherwise, your HTTP request will not work
 	const activities = {
 		teamIn: ['basketball','hockey','volleyball'],
 		teamOutWarm: ['softball/baseball','football/soccer','American football','rowing','tennis','volleyball','ultimate frisbee','rugby'],
@@ -15,16 +15,26 @@
 	let category = 'all';
 
 	// get weather data when user clicks Forecast button, then add temp & conditions to view
+
 	$('.forecast-button').click(function(e) {
 		e.preventDefault();
-		const location = $('#location').val();
-		$('#location').val('');
-
+		const location = document.querySelector('#location').value;
+		//document.querySelector('#location').value = '';
+		/*
 		$.get(url + location + '&appid=' + apiKey).done(function(response) {
 			updateUISuccess(response);
 		}).fail(function() {
 			updateUIFailure();
 		});
+		*/
+
+		fetch(url + location + '&appid=' + apiKey).then(function(response){
+				return(response.json());
+			}).then(function(response){
+				updateUISuccess(response);
+			}).catch(function(){
+				updateUIFailure();
+			})
 	});
 
 	// update list of sports when user selects a different category (solo/team/all)
@@ -44,9 +54,9 @@
 			city: response.name
 		};
 
-		const $into = $('.conditions')[0];
+		const into = document.querySelector('.conditions');
 
-		ReactDOM.render(<Forecast {...state} />, $into);
+		ReactDOM.render(<Forecast {...state} />, into);
 
 		function Forecast(props) {
 			return (
@@ -97,9 +107,9 @@
 			}
 		}
 
-		const $into = $('.activities')[0];
+		const into = document.querySelector('.activities');
 
-		ReactDOM.render(<Activities {...state} />, $into);
+		ReactDOM.render(<Activities {...state} />, into);
 
 		function Activities(props) {
 			const activitiesList = props.activities.map(function(activity, index) {
