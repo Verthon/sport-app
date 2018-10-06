@@ -15,10 +15,10 @@
 	let category = 'all';
 
 	// get weather data when user clicks Forecast button, then add temp & conditions to view
-
-	$('.forecast-button').click(function(e) {
+	document.querySelector('.forecast-button').addEventListener('click', e =>{
 		e.preventDefault();
 		const location = document.querySelector('#location').value;
+		document.querySelector('#location').value = '';
 
 		fetch(url + location + '&appid=' + apiKey).then(function(response){
 				return(response.json());
@@ -27,10 +27,13 @@
 			}).catch(function(){
 				updateUIFailure();
 			})
-	});
+	},false);
+		
 
 	// update list of sports when user selects a different category (solo/team/all)
-	$('.options div').on('click', updateActivityList);
+	document.querySelectorAll('.options div').forEach((el) =>{
+		el.addEventListener('click', updateActivityList, false);
+	});
 
 	// handle ajax success
 	function updateUISuccess(response) {
@@ -75,7 +78,10 @@
 			// if the clicked tab does not have the class 'selected', then location of 'selected' class must be added
 			//   to the clicked element and removed from its siblings
 			category = $(this).attr('id');
-			$('.options div').removeClass('selected');
+			document.querySelectorAll('.options div').forEach(el => {
+				el.classList.remove('selected');
+			});
+			//$('.options div').removeClass('selected');
 			$(this).addClass('selected');
 		} 
 
