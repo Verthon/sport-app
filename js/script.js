@@ -62,27 +62,36 @@
 			)
 		}
 
+		let container = document.createElement('div');
+		let cityParagraph = document.createElement('p');
+		cityParagraph.setAttribute('class', 'city');
+		cityParagraph.textContent = state.city;
+		let conditionsParagraph = document.createElement('p');
+		conditionsParagraph.textContent = state.degCInt + '\u00B0 C / ' + state.degFInt + '\u00B0 F';
+		let iconImage = document.createElement('img');
+		iconImage.setAttribute('src', state.icon);
+		iconImage.setAttribute('alet', state.condition);
 		updateActivityList();
 	}
 
 	// handle selection of a new category (team/solo/all) 
 	function updateActivityList(event) {
-		if (event !== undefined && $(this).hasClass('selected')) {
+		if (event !== undefined && event.target.classList.contains('selected')) {
 			// if the 'event' parameter is defined, then a tab has been clicked; if not, then this is the
 			//   default case and the view simply needs to be updated
 			// if the clicked tab has the class 'selected', then no need to change location of 'selected' class
 			//   or change the DOM
 			return true;
-		} else if (event !== undefined && !$(this).hasClass('selected')) {
+		} else if (event !== undefined && !event.target.classList.contains('selected')) {
 			// if the 'event' parameter is defined, then a tab has been clicked
 			// if the clicked tab does not have the class 'selected', then location of 'selected' class must be added
 			//   to the clicked element and removed from its siblings
-			category = $(this).attr('id');
+			category = event.target.id;
 			document.querySelectorAll('.options div').forEach(el => {
 				el.classList.remove('selected');
 			});
 			//$('.options div').removeClass('selected');
-			$(this).addClass('selected');
+			event.target.classList.add('selected');
 		} 
 
 		state.activities = [];
@@ -120,11 +129,17 @@
 			)
 		}
 
+		let activitiesContainer = document.createElement('div');
+		let list = document.createElement('ul');
+		state.activities.forEach(() => {
+			let listItem = document.createElement('li');
+		});
+
 		$('.results').slideDown(300);
 	}
 
 	// handle ajax failure
 	function updateUIFailure() {
-		$(".conditions").text("Weather information unavailable");
+		document.querySelector(".conditions").textContent = "Weather information unavailable";
 	}
 })();
